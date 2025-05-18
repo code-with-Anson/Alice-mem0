@@ -1,16 +1,19 @@
 import json
-import logging
-
-from openai import OpenAI
+import os
 from typing import List
+
 from dotenv import load_dotenv
+from openai import OpenAI
 from pydantic import BaseModel
 from tenacity import retry, stop_after_attempt, wait_exponential
+
 from app.utils.prompts import MEMORY_CATEGORIZATION_PROMPT
 
 load_dotenv()
 
-openai_client = OpenAI()
+openai_client = OpenAI(
+    base_url=os.environ.get("OPENAI_BASE_URL"), api_key=os.environ.get("OPENAI_API_KEY")
+)
 
 
 class MemoryCategories(BaseModel):
@@ -28,8 +31,8 @@ def get_categories_for_memory(memory: str) -> List[str]:
             temperature=0,
             text_format=MemoryCategories,
         )
-        response_json =json.loads(response.output[0].content[0].text)
-        categories = response_json['categories']
+        response_json = json.loads(response.output[0].content[0].text)
+        categories = response_json["categories"]
         categories = [cat.strip().lower() for cat in categories]
         # TODO: Validate categories later may be
         return categories
