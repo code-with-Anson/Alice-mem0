@@ -22,12 +22,15 @@ MEMORY_CATEGORIZATION_PROMPT = """你的任务是将每条信息（或"记忆"�
 - 目标：抱负、KPI、长期目标
 
 指南：
-- 仅在JSON格式的'categories'键下返回类别。
-- 所有返回的类别名称必须使用英文，即使内容是中文的。
-- 如果无法对记忆进行分类，请返回带有'categories'键的空列表。
-- 不要仅限于上面列出的类别。可以根据记忆内容创建新类别。确保它是单个短语。
-"""
+- 你必须严格返回有效的JSON格式，不包含任何前导或后缀文本
+- 你的响应必须是一个包含'categories'键的JSON对象，值为类别字符串数组
+- 例如：{"categories": ["personal", "relationships"]}
+- 所有返回的类别名称必须使用英文，即使内容是中文的
+- 如果无法对记忆进行分类，请返回带有'categories'键的空列表：{"categories": []}
+- 不要仅限于上面列出的类别。可以根据记忆内容创建新类别。确保它是单个短语
 
+记住，你的整个输出必须只是一个有效的JSON对象，没有任何额外的文本、解释或装饰。
+"""
 
 # MEMORY_CATEGORIZATION_PROMPT = """Your task is to assign each piece of information (or “memory”) to one or more of the following categories. Feel free to use multiple categories per item when appropriate.
 #
